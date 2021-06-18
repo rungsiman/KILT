@@ -1,0 +1,4 @@
+{
+    "input_file": "original_data/zeshel/mentions/eval.json",
+    "output_file": "output/zeshel-eval-kilt.jsonl"
+}

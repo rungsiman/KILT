@@ -1,0 +1,4 @@
+{
+    "input_file": "original_data/zeshel/mentions/train.json",
+    "output_file": "output/zeshel-train-kilt.jsonl"
+}

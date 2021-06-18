@@ -30,6 +30,28 @@ def run(
     debug=False,
     output_folder="",
 ):
+    """
+    Called by kilt.scripts.execute_retrieval.execute.
+    Runs the retrival model and outputs the results to output folder.
+
+    param test_config_json: 
+        Test config dictionary.
+        The default test config file is kilt/configs/test_data.json,
+        which stores the locations of a test file for each task.
+    param ranker:
+        The retriever model.
+        An instance of kilt.retrievers.base_retriever.Retriever.
+    param model_name:
+        [Declared but not used]
+    param logger:
+        Default: Python's standard logger.
+    param topk:
+        [Declared but not used]
+    param debug:
+        Just consider the top-10 datapoints for debugging.
+    param output_folder:
+        Outputs prediction files for test data configured by `test_config_json`.
+    """
 
     for task_family, datasets in test_config_json.items():
         logger.info("TASK: {}".format(task_family))

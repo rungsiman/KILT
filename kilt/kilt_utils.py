@@ -30,7 +30,7 @@ def normalize_answer(s):
     return remove_punc(lower(s))
 
 
-def validate_datapoint(datapoint, logger):
+def validate_datapoint(datapoint, logger, rank_key="wikipedia_id"):
 
     # input is a string
     if not isinstance(datapoint["input"], str):
@@ -69,12 +69,12 @@ def validate_datapoint(datapoint, logger):
 
             if "provenance" in output:
                 for provenance in output["provenance"]:
-                    # wikipedia_id is provided
-                    if not isinstance(provenance["wikipedia_id"], str):
+                    # rank_key (e.g., wikipedia_id) is provided
+                    if not isinstance(provenance[rank_key], str):
                         if logger:
                             logger.warning(
-                                "[{}] wikipedia_id is not a string {}".format(
-                                    datapoint["id"], provenance["wikipedia_id"]
+                                "[{}] {} is not a string {}".format(
+                                    datapoint["id"], rank_key, provenance[rank_key]
                                 )
                             )
                         return False
@@ -200,6 +200,7 @@ def match_answer(
     normalize_text=True,
     fast=False,
     approximate_search=False,
+    page_title_attr="wikipedia_title"
 ):
     # if nlp == None:
     #    nlp = spacy.load("en_core_web_sm")
@@ -398,7 +399,7 @@ def match_answer(
                 break
 
     if debug:
-        print("wikipedia_tile:", page["wikipedia_title"])
+        print(f"{page_title_attr}:", page[page_title_attr])
         print("bleu: {0:.2f}".format(max_bleu))
         print("paragraph_id:", paragraph_id)
         print("start_token_id:", start_token)

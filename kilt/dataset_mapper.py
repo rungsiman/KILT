@@ -19,9 +19,9 @@ def run_thread(args):
     return dataset.process_chunk(args["chunk"], args["ks"], args["id"])
 
 
-def map_dataset(dataset):
+def map_dataset(dataset, knowledge_source=None):
     print("Processing {} dataset.".format(dataset.name))
-    ks = KnowledgeSource()
+    ks = knowledge_source or KnowledgeSource()
 
     num_threads = (
         min(dataset.max_chunks, int(multiprocessing.cpu_count()))

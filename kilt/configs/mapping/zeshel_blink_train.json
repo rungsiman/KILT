@@ -1,0 +1,4 @@
+{
+    "input_file": "original_data/zeshel/blink_format/train.jsonl",
+    "output_file": "output/zeshel-blink-train-kilt.jsonl"
+}

@@ -84,7 +84,7 @@ def _rougel_score(prediction, ground_truth):
     return scores["rouge-l"]["f"]
 
 
-def _calculate_metrics(gold_records, guess_records):
+def _calculate_metrics(gold_records, guess_records, rank_keys):
 
     assert len(gold_records) == len(
         guess_records
@@ -153,7 +153,7 @@ def _calculate_metrics(gold_records, guess_records):
 
         # KILT-metrics
         Rprec = retrieval_metrics.rprecision(
-            guess_item, gold_item, rank_keys=["wikipedia_id"]
+            guess_item, gold_item, rank_keys=rank_keys
         )
         if Rprec == 1:
             # 1. KILT-AC
@@ -226,7 +226,7 @@ def validate_input(gold_records, guess_records):
     return gold_records, guess_records
 
 
-def evaluate(gold, guess):
+def evaluate(gold, guess, rank_keys):
     pp = pprint.PrettyPrinter(indent=4)
 
     gold_records = kilt_utils.load_data(gold)
@@ -236,11 +236,11 @@ def evaluate(gold, guess):
     gold_records, guess_records = validate_input(gold_records, guess_records)
 
     # 1. downstream + kilt
-    result = _calculate_metrics(gold_records, guess_records)
+    result = _calculate_metrics(gold_records, guess_records, rank_keys)
 
     # 2. retrieval performance
     retrieval_results = retrieval_metrics.compute(
-        gold_records, guess_records, ks=[1, 5], rank_keys=["wikipedia_id"]
+        gold_records, guess_records, ks=[1, 5], rank_keys=rank_keys
     )
     result["retrieval"] = {
         "Rprec": retrieval_results["Rprec"],
@@ -255,6 +255,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("guess", help="Guess KILT file")
     parser.add_argument("gold", help="Gold KILT file")
+    parser.add_argument(
+        "--rank_keys",
+        type=str,
+        required=False,
+        default="wikipedia_id",
+        help="Comma separated list of rank keys for recall@k and precision@k",
+    )
 
     args = parser.parse_args()
-    evaluate(args.gold, args.guess)
+    evaluate(args.gold, args.guess, args.rank_keys.split(","))
