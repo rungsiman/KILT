@@ -37,6 +37,6 @@ class Wikias(KnowledgeBase):
                         'domain': file.replace('.json', '')
                     })
                 
-                self.db.insert_many(docs)
+                self.collection.insert_many(docs)
         
         print(f'Imported {self.get_num_pages()} documents.')

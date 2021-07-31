@@ -18,21 +18,22 @@ class KnowledgeBase:
             mongo_connection_string = DEFAULT_MONGO_CONNECTION_STRING
 
         self.client = MongoClient(mongo_connection_string)
-        self.db = self.client[database][collection]
+        self.db = self.client[database]
+        self.collection = self.db[collection]
 
     def get_all_pages_cursor(self):
-        cursor = self.db.find({})
+        cursor = self.collection.find({})
         return cursor
     
     def get_num_pages(self):
-        return self.db.count()
+        return self.collection.count()
     
     def get_page_by_id(self, page_id):
-        page = self.db.find_one({"_id": str(page_id)})
+        page = self.collection.find_one({"_id": str(page_id)})
         return page
     
     def get_page_by_title(self, page_title, attempt=0):
-        page = self.db.find_one({self.page_title_attr: str(page_title)})
+        page = self.collection.find_one({self.page_title_attr: str(page_title)})
         return page
 
     def get_page_from_url(self, url):
