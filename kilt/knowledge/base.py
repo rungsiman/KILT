@@ -4,15 +4,14 @@ DEFAULT_MONGO_CONNECTION_STRING = "mongodb://127.0.0.1:27017/admin"
 
 
 class KnowledgeBase:
-    page_id_attr = ...
-    page_title_attr = ...
-    page_description_attr = ...
-
     def __init__(
         self,
-        mongo_connection_string,
-        database,
-        collection
+        mongo_connection_string: str,
+        database: str,
+        collection: str,
+        page_id_attr: str,
+        page_title_attr: str,
+        page_description_attr: str
     ):
         if mongo_connection_string is None:
             mongo_connection_string = DEFAULT_MONGO_CONNECTION_STRING
@@ -20,6 +19,10 @@ class KnowledgeBase:
         self.client = MongoClient(mongo_connection_string)
         self.db = self.client[database]
         self.collection = self.db[collection]
+
+        self.page_id_attr = page_id_attr
+        self.page_title_attr = page_title_attr
+        self.page_description_attr = page_description_attr
 
     def get_all_pages_cursor(self):
         cursor = self.collection.find({})
